@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   theme: {
     container: {
@@ -17,6 +17,19 @@ module.exports = {
     },
     extend: {
       colors: {
+        main: "var(--main)",
+        overlay: "var(--overlay)",
+        bg: "var(--bg)",
+        bw: "var(--bw)",
+        blank: "var(--blank)",
+        text: "var(--text)",
+        mtext: "var(--mtext)",
+        border: "var(--border)",
+        ring: "var(--ring)",
+        ringOffset: "var(--ring-offset)",
+
+        secondaryBlack: "#212121",
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -52,6 +65,7 @@ module.exports = {
         },
       },
       borderRadius: {
+        base: "5px",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
@@ -70,7 +84,20 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      boxShadow: {
+        shadow: "var(--shadow)",
+      },
+      translate: {
+        boxShadowX: "4px",
+        boxShadowY: "4px",
+        reverseBoxShadowX: "-4px",
+        reverseBoxShadowY: "-4px",
+      },
+      fontWeight: {
+        base: "500",
+        heading: "700",
+      },
     },
   },
   plugins: [require("@tailwindcss/typography")],
-} 
+};
