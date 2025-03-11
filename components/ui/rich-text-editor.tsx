@@ -118,22 +118,32 @@ interface MenuBarProps {
 }
 
 function MenuBar({ editor, onButtonClick }: MenuBarProps) {
-  if (!editor) {
-    return null;
-  }
-
+  // Define useCallback hooks outside of any conditional blocks
   const addImage = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-    const url = window.prompt('URL');
-    if (url) {
+    if (!editor) return;
+    
+    const url = window.prompt('Enter image URL');
+    if (!url) return;
+    
+    // Validate URL
+    try {
+      // Check if it's a valid URL
+      new URL(url);
+      
+      // Add the image to the editor
       editor.chain().focus().setImage({ src: url }).run();
+    } catch {
+      alert('Please enter a valid URL');
     }
   }, [editor]);
 
   const setLink = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
+    if (!editor) return;
+    
     const previousUrl = editor.getAttributes('link').href;
-    const url = window.prompt('URL', previousUrl);
+    const url = window.prompt('Enter link URL', previousUrl);
 
     // cancelled
     if (url === null) {
@@ -146,9 +156,27 @@ function MenuBar({ editor, onButtonClick }: MenuBarProps) {
       return;
     }
 
-    // update link
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    // Validate URL
+    try {
+      // Check if it's a valid URL or add https:// if missing
+      let validUrl = url;
+      if (!/^https?:\/\//i.test(url)) {
+        validUrl = 'https://' + url;
+      }
+      
+      // Test if it's a valid URL
+      new URL(validUrl);
+      
+      // update link
+      editor.chain().focus().extendMarkRange('link').setLink({ href: validUrl }).run();
+    } catch {
+      alert('Please enter a valid URL');
+    }
   }, [editor]);
+
+  if (!editor) {
+    return null;
+  }
 
   return (
     <div className="flex flex-wrap gap-1 mb-2 border-b pb-2">

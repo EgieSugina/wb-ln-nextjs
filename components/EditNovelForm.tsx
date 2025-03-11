@@ -21,6 +21,7 @@ import { GET_GENRES, GET_NOVELS } from "@/lib/graphql/queries";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Genre, Novel } from "@/lib/graphql/types";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -239,7 +240,7 @@ export function EditNovelForm({ novel, trigger }: EditNovelFormProps) {
             <FormField
               control={form.control}
               name="coverImage"
-              render={({ field: { value, onChange, ...fieldProps } }) => (
+              render={({ field: { onChange, ...fieldProps } }) => (
                 <FormItem>
                   <FormLabel>Cover Image</FormLabel>
                   <FormControl>
@@ -247,11 +248,14 @@ export function EditNovelForm({ novel, trigger }: EditNovelFormProps) {
                       {imagePreview && (
                         <div className="mb-2">
                           <p className="text-sm text-gray-500 mb-1">Current Image:</p>
-                          <img 
-                            src={imagePreview} 
-                            alt="Cover preview" 
-                            className="w-full max-h-40 object-cover rounded-md"
-                          />
+                          <div className="relative w-full h-40">
+                            <Image 
+                              src={imagePreview} 
+                              alt="Cover preview" 
+                              fill
+                              className="object-contain rounded-md"
+                            />
+                          </div>
                         </div>
                       )}
                       <Input

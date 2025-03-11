@@ -15,16 +15,16 @@ const apolloServer = new ApolloServer({
 const handler = startServerAndCreateNextHandler(apolloServer);
 
 // Export the API route handlers
-export async function GET(req: NextRequest) {
-  return handler(req);
+export async function GET(request: NextRequest) {
+  return handler(request);
 }
 
-export async function POST(req: NextRequest) {
-  return handler(req);
+export async function POST(request: NextRequest) {
+  return handler(request);
 }
 
 // Handle OPTIONS requests for CORS
-export async function OPTIONS(req: NextRequest) {
+export async function OPTIONS() {
   return new Response(null, {
     status: 204,
     headers: {

@@ -5,6 +5,7 @@ import { useQuery } from "@apollo/client";
 import { GET_GENRES } from "@/lib/graphql/queries";
 import { Genre, GenresData } from "@/lib/graphql/types";
 import { AddGenreForm } from "@/components/AddGenreForm";
+import Link from "next/link";
 
 export default function GenresPage() {
   const { loading, error, data } = useQuery<GenresData>(GET_GENRES);
@@ -47,8 +48,13 @@ export default function GenresPage() {
                 </p>
                 <ul className="text-sm space-y-1">
                   {genre.novels.map(novel => (
-                    <li key={novel.id} className="text-blue-500 hover:underline cursor-pointer">
-                      {novel.title}
+                    <li key={novel.id}>
+                      <Link 
+                        href={`/novels/${novel.id}`}
+                        className="text-blue-500 hover:underline"
+                      >
+                        {novel.title}
+                      </Link>
                     </li>
                   ))}
                 </ul>

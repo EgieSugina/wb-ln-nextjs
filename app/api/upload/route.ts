@@ -1,28 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Storage } from '@google-cloud/storage';
 import { v4 as uuidv4 } from 'uuid';
-
-// Initialize Google Cloud Storage
-let storage: Storage;
-try {
-  // If running in production, use the credentials from environment variables
-  if (process.env.GOOGLE_CLOUD_CREDENTIALS) {
-    storage = new Storage({
-      credentials: JSON.parse(process.env.GOOGLE_CLOUD_CREDENTIALS),
-      projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
-    });
-  } else {
-    // For local development, use the credentials file
-    storage = new Storage({
-      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-      projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
-    });
-  }
-} catch (error) {
-  console.error('Error initializing Google Cloud Storage:', error);
-}
-
-const bucketName = process.env.GOOGLE_CLOUD_BUCKET_NAME || 'light-novel-images';
+import { storage, bucketName } from '@/lib/storage-utils';
 
 // Duration for signed URLs (in seconds)
 const SIGNED_URL_EXPIRATION = 7 * 24 * 60 * 60; // 7 days
@@ -77,7 +55,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Return a promise that resolves when the file is uploaded
-    return new Promise((resolve, reject) => {
+    return new Promise<NextResponse>((resolve) => {
       blobStream.on('error', (err) => {
         console.error('Error uploading to Google Cloud Storage:', err);
         resolve(NextResponse.json(
@@ -88,7 +66,7 @@ export async function POST(request: NextRequest) {
 
       blobStream.on('finish', async () => {
         try {
-          let fileUrl;
+          let fileUrl: string;
           
           // First try to make the file public (works only with fine-grained access control)
           try {
@@ -96,12 +74,13 @@ export async function POST(request: NextRequest) {
             // If successful, use the public URL
             fileUrl = `https://storage.googleapis.com/${bucketName}/${filePath}`;
             console.log('File made public successfully');
-          } catch (error: any) {
-            console.log(`Could not make file public: ${error.message}`);
+          } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            console.log(`Could not make file public: ${errorMessage}`);
             
             // If we can't make it public, generate a signed URL
-            if (error.message.includes('public access prevention') || 
-                error.message.includes('uniform bucket-level access')) {
+            if (errorMessage.includes('public access prevention') || 
+                errorMessage.includes('uniform bucket-level access')) {
               // Generate a signed URL that expires after a set time
               const [signedUrl] = await blob.getSignedUrl({
                 action: 'read',
@@ -116,10 +95,11 @@ export async function POST(request: NextRequest) {
           }
 
           resolve(NextResponse.json({ url: fileUrl }));
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
           console.error('Error processing uploaded file:', error);
           resolve(NextResponse.json(
-            { error: `Error processing file: ${error.message}` },
+            { error: `Error processing file: ${errorMessage}` },
             { status: 500 }
           ));
         }
@@ -127,10 +107,11 @@ export async function POST(request: NextRequest) {
 
       blobStream.end(buffer);
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('Error in upload API route:', error);
     return NextResponse.json(
-      { error: `Internal server error: ${error.message}` },
+      { error: `Internal server error: ${errorMessage}` },
       { status: 500 }
     );
   }

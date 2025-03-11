@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { GET_NOVEL, GET_CHAPTERS } from '@/lib/graphql/queries';
 import { NovelData, ChaptersData } from '@/lib/graphql/types';
 import { useParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { EditNovelForm } from '@/components/EditNovelForm';
 import { DeleteNovelButton } from '@/components/DeleteNovelButton';
@@ -68,10 +68,12 @@ export default function NovelPage() {
           <div className="w-full md:w-1/3 lg:w-1/4">
             {novel.coverImage ? (
               <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg shadow-md">
-                <img
+                <Image
                   src={novel.coverImage}
                   alt={`${novel.title} cover`}
-                  className="object-cover w-full h-full"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                  className="object-cover"
                 />
               </div>
             ) : (
