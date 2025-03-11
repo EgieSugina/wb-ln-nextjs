@@ -35,6 +35,8 @@ interface EditChapterFormProps {
 }
 
 export function EditChapterForm({ chapter, trigger }: EditChapterFormProps) {
+  console.log(chapter);
+  
   const [open, setOpen] = useState(false);
   const [updateChapter] = useMutation(UPDATE_CHAPTER, {
     refetchQueries: [{ query: GET_CHAPTERS, variables: { novelId: chapter.novelId } }],
@@ -59,6 +61,8 @@ export function EditChapterForm({ chapter, trigger }: EditChapterFormProps) {
   }, [chapter, form]);
 
   async function onSubmit(data: ChapterFormValues) {
+   
+    
     try {
       await updateChapter({
         variables: {

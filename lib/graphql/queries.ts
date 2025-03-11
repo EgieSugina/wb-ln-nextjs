@@ -56,6 +56,7 @@ export const GET_CHAPTERS = gql`
   query GetChapters($novelId: Int!) {
     chapters(novelId: $novelId) {
       id
+      novelId
       number
       title
       content
