@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Models for the light novel application
+model Novel {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  coverImage  String?
+  author      String
+  status      String    @default("Ongoing") // Ongoing, Completed, Hiatus
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  chapters    Chapter[]
+  genres      Genre[]   @relation("NovelToGenre")
+}
+
+model Chapter {
+  id        Int      @id @default(autoincrement())
+  number    Float    // Using float to allow for chapters like 1.5, etc.
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  novelId   Int
+  novel     Novel    @relation(fields: [novelId], references: [id])
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  novels Novel[] @relation("NovelToGenre")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("USER") // USER, ADMIN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
