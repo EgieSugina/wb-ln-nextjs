@@ -20,16 +20,34 @@ import { UPDATE_NOVEL } from "@/lib/graphql/mutations";
 import { GET_GENRES, GET_NOVELS } from "@/lib/graphql/queries";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Genre, Novel } from "@/lib/graphql/types";
+import { Loader2 } from "lucide-react";
 
-const novelFormSchema = z.object({
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+// Move schema definition inside component to access window object
+const getNovelFormSchema = () => z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
   author: z.string().min(1, "Author is required"),
   status: z.string().default("Ongoing"),
   genreIds: z.array(z.number()).optional(),
+  coverImage: typeof window === 'undefined' 
+    ? z.any()
+    : z.instanceof(FileList)
+      .optional()
+      .refine((files) => !files || files.length === 0 || files.length === 1, "Please upload only one file")
+      .refine(
+        (files) => !files || files.length === 0 || files[0].size <= MAX_FILE_SIZE,
+        `Max file size is 5MB`
+      )
+      .refine(
+        (files) => !files || files.length === 0 || ACCEPTED_IMAGE_TYPES.includes(files[0].type),
+        "Only .jpg, .jpeg, .png and .webp formats are supported"
+      ),
 });
 
-type NovelFormValues = z.infer<typeof novelFormSchema>;
+type NovelFormValues = z.infer<ReturnType<typeof getNovelFormSchema>>;
 
 interface EditNovelFormProps {
   novel: Novel;
@@ -38,13 +56,17 @@ interface EditNovelFormProps {
 
 export function EditNovelForm({ novel, trigger }: EditNovelFormProps) {
   const [open, setOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(novel.coverImage || null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(novel.coverImage || null);
+  
   const { data: genresData } = useQuery(GET_GENRES);
   const [updateNovel] = useMutation(UPDATE_NOVEL, {
     refetchQueries: [{ query: GET_NOVELS }],
   });
 
   const form = useForm<NovelFormValues>({
-    resolver: zodResolver(novelFormSchema),
+    resolver: zodResolver(getNovelFormSchema()),
     defaultValues: {
       title: novel.title,
       description: novel.description || "",
@@ -63,10 +85,61 @@ export function EditNovelForm({ novel, trigger }: EditNovelFormProps) {
       status: novel.status,
       genreIds: novel.genres.map(genre => genre.id),
     });
+    setImagePreview(novel.coverImage || null);
+    setUploadedImageUrl(novel.coverImage || null);
   }, [novel, form]);
+
+  // Handle image preview
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(novel.coverImage || null);
+    }
+  };
+
+  // Upload image to Google Cloud Storage
+  const uploadImage = async (file: File): Promise<string> => {
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const data = await response.json();
+      return data.url;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    } finally {
+      setUploading(false);
+    }
+  };
 
   async function onSubmit(data: NovelFormValues) {
     try {
+      let coverImageUrl = uploadedImageUrl;
+
+      // Upload image if provided and not already uploaded
+      if (data.coverImage && data.coverImage.length > 0) {
+        coverImageUrl = await uploadImage(data.coverImage[0]);
+        setUploadedImageUrl(coverImageUrl);
+      }
+
       await updateNovel({
         variables: {
           id: novel.id,
@@ -75,6 +148,7 @@ export function EditNovelForm({ novel, trigger }: EditNovelFormProps) {
             description: data.description,
             author: data.author,
             status: data.status,
+            coverImage: coverImageUrl,
             genreIds: data.genreIds || [],
           },
         },
@@ -164,6 +238,42 @@ export function EditNovelForm({ novel, trigger }: EditNovelFormProps) {
             />
             <FormField
               control={form.control}
+              name="coverImage"
+              render={({ field: { value, onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>Cover Image</FormLabel>
+                  <FormControl>
+                    <div className="space-y-2">
+                      {imagePreview && (
+                        <div className="mb-2">
+                          <p className="text-sm text-gray-500 mb-1">Current Image:</p>
+                          <img 
+                            src={imagePreview} 
+                            alt="Cover preview" 
+                            className="w-full max-h-40 object-cover rounded-md"
+                          />
+                        </div>
+                      )}
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          onChange(e.target.files);
+                          handleImageChange(e);
+                        }}
+                        {...fieldProps}
+                      />
+                      <p className="text-xs text-gray-500">
+                        Leave empty to keep the current image
+                      </p>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="genreIds"
               render={({ field }) => (
                 <FormItem>
@@ -189,7 +299,20 @@ export function EditNovelForm({ novel, trigger }: EditNovelFormProps) {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">Save Changes</Button>
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={uploading}
+            >
+              {uploading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                "Save Changes"
+              )}
+            </Button>
           </form>
         </Form>
       </DialogContent>

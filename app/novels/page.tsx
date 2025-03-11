@@ -29,7 +29,7 @@ export default function NovelsPage() {
   const novels = data?.novels || [];
 
   return (
-    <div className="space-y-6">
+    <div className="container mx-auto py-8 px-4 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Light Novels</h1>
         <AddNovelForm />
@@ -38,17 +38,30 @@ export default function NovelsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {novels.map((novel: Novel) => (
           <Link href={`/novels/${novel.id}`} key={novel.id}>
-            <Card className="transition-transform hover:scale-105">
+            <Card className="transition-transform hover:scale-105 h-full flex flex-col overflow-hidden">
+              <div className="relative h-48 w-full">
+                {novel.coverImage ? (
+                  <img
+                    src={novel.coverImage}
+                    alt={`${novel.title} cover`}
+                    className="object-cover w-full h-full"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <p className="text-gray-500">No cover image</p>
+                  </div>
+                )}
+              </div>
               <CardHeader>
                 <CardTitle>{novel.title}</CardTitle>
                 <CardDescription>
                   {novel.genres.map(genre => genre.name).join(", ")}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-grow">
                 <div className="space-y-2">
-                  <p className="text-gray-600">{novel.description}</p>
-                  <div className="flex justify-between text-sm">
+                  <p className="text-gray-600 line-clamp-3">{novel.description}</p>
+                  <div className="flex justify-between text-sm mt-auto">
                     <span>By {novel.author}</span>
                     <span className="text-blue-500">{novel.status}</span>
                   </div>

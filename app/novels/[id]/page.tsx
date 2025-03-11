@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { EditNovelForm } from '@/components/EditNovelForm';
 import { DeleteNovelButton } from '@/components/DeleteNovelButton';
 import { AddChapterForm } from '@/components/AddChapterForm';
+import Image from 'next/image';
 
 export default function NovelPage() {
   const params = useParams();
@@ -63,30 +64,49 @@ export default function NovelPage() {
         >
           Back to Novels
         </Button>
-        <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">{novel.title}</h1>
-            <p className="text-gray-600 mb-2">Author: {novel.author}</p>
-            <p className="text-gray-600 mb-2">Status: {novel.status}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {novel.genres.map(genre => (
-                <span
-                  key={genre.id}
-                  className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
-                >
-                  {genre.name}
-                </span>
-              ))}
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="w-full md:w-1/3 lg:w-1/4">
+            {novel.coverImage ? (
+              <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg shadow-md">
+                <img
+                  src={novel.coverImage}
+                  alt={`${novel.title} cover`}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            ) : (
+              <div className="aspect-[2/3] w-full bg-gray-200 rounded-lg flex items-center justify-center shadow-md">
+                <p className="text-gray-500">No cover image</p>
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">{novel.title}</h1>
+                <p className="text-gray-600 mb-2">Author: {novel.author}</p>
+                <p className="text-gray-600 mb-2">Status: {novel.status}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {novel.genres.map(genre => (
+                    <span
+                      key={genre.id}
+                      className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                    >
+                      {genre.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <EditNovelForm novel={novel} />
+                <DeleteNovelButton novelId={novel.id} novelTitle={novel.title} />
+              </div>
+            </div>
+            <div className="mt-4">
+              <h2 className="text-xl font-semibold mb-2">Description</h2>
+              <p className="text-gray-700">{novel.description}</p>
             </div>
           </div>
-          <div className="flex gap-2">
-            <EditNovelForm novel={novel} />
-            <DeleteNovelButton novelId={novel.id} novelTitle={novel.title} />
-          </div>
-        </div>
-        <div className="mt-4">
-          <h2 className="text-xl font-semibold mb-2">Description</h2>
-          <p className="text-gray-700">{novel.description}</p>
         </div>
       </div>
 
@@ -98,33 +118,18 @@ export default function NovelPage() {
         {sortedChapters.length === 0 ? (
           <p className="text-gray-500">No chapters available yet.</p>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {sortedChapters.map(chapter => (
-              <Card key={chapter.id} className="hover:shadow-md transition-shadow">
-                <CardHeader className="p-4">
+              <Card 
+                key={chapter.id} 
+                className="hover:shadow-md transition-shadow cursor-pointer"
+                onClick={() => router.push(`/novels/${novel.id}/chapters/${chapter.id}`)}
+              >
+                <CardHeader className="py-3">
                   <CardTitle className="text-lg">
                     Chapter {chapter.number}: {chapter.title}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <div className="flex justify-between items-center">
-                    <Button
-                      variant="outline"
-                      onClick={() => router.push(`/novels/${novel.id}/chapters/${chapter.id}`)}
-                    >
-                      Read Chapter
-                    </Button>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => router.push(`/novels/${novel.id}/chapters/${chapter.id}`)}
-                      >
-                        Edit
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
               </Card>
             ))}
           </div>
