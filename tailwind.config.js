@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -17,19 +17,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        main: "var(--main)",
-        overlay: "var(--overlay)",
-        bg: "var(--bg)",
-        bw: "var(--bw)",
-        blank: "var(--blank)",
-        text: "var(--text)",
-        mtext: "var(--mtext)",
-        border: "var(--border)",
-        ring: "var(--ring)",
-        ringOffset: "var(--ring-offset)",
-
-        secondaryBlack: "#212121",
-
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -63,27 +50,23 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+
+        // NEOBRUTALISM
+
+        main: "var(--main)",
+        overlay: "var(--overlay)",
+        bg: "var(--bg)",
+        bw: "var(--bw)",
+        blank: "var(--blank)",
+        text: "var(--text)",
+        mtext: "var(--mtext)",
+        border: "var(--border)",
+        ring: "var(--ring)",
+        ringOffset: "var(--ring-offset)",
+
+        secondaryBlack: "#212121",
       },
-      borderRadius: {
-        base: "5px",
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
+
       boxShadow: {
         shadow: "var(--shadow)",
       },
@@ -96,6 +79,27 @@ module.exports = {
       fontWeight: {
         base: "500",
         heading: "700",
+      },
+      borderRadius: {
+        base: "5px",
+
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
