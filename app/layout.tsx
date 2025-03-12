@@ -3,12 +3,13 @@ import { Inter } from 'next/font/google';
 import { Providers } from './providers';
 import Link from 'next/link';
 import { ThemeSwitcher } from '@/components/ui/theme-switcher';
+import { Button } from '@/components/ui/button';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Web Light Novel',
-  description: 'A platform for reading and managing light novels',
+  title: "Web Light Novel",
+  description: "A platform for reading and managing light novels",
 };
 
 export default function RootLayout({
@@ -39,6 +40,13 @@ export default function RootLayout({
                         Genres
                       </Link>
                     </div>
+                  </div>
+
+                  {/* Bagian Kanan: Tombol Login */}
+                  <div className="hidden sm:flex items-center ml-auto">
+                    <Button className="inline-flex">
+                      <Link href="#">Login</Link>
+                    </Button>
                   </div>
                   <div className="flex items-center">
                     <ThemeSwitcher />
