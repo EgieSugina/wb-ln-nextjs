@@ -42,3 +42,11 @@ next-env.d.ts
 
 # Google Cloud Storage
 secret-key.json
+
+prisma/dev.db
+prisma/dev.db-journal
+prisma/dev.db-trace.json
+prisma/dev.db-trace.jsonl
+prisma/dev.db-trace.jsonl.gz
+prisma/dev.db-trace.jsonl.gz.part
+prisma/dev.db-trace.jsonl.gz.part.1

@@ -223,7 +223,7 @@ export function AddNovelForm() {
             <FormField
               control={form.control}
               name="coverImage"
-              render={({ field: { onChange, ...fieldProps } }) => (
+              render={({ field: { onChange, value, ...fieldProps } }) => (
                 <FormItem>
                   <FormLabel>Cover Image</FormLabel>
                   <FormControl>
