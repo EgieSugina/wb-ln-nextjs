@@ -1,9 +1,9 @@
-import './globals.css';
-import { Inter } from 'next/font/google';
-import { Providers } from './providers';
-import Link from 'next/link';
-import { ThemeSwitcher } from '@/components/ui/theme-switcher';
-import { Button } from '@/components/ui/button';
+import "./globals.css";
+import { Inter } from "next/font/google";
+import { Providers } from "./providers";
+import Link from "next/link";
+import { ThemeSwitcher } from "@/components/ui/theme-switcher";
+import { Button } from "@/components/ui/button";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,16 +27,27 @@ export default function RootLayout({
                 <div className="flex justify-between h-16">
                   <div className="flex">
                     <div className="flex-shrink-0 flex items-center">
-                      <h1 className="text-xl font-bold text-gray-900 dark:text-white">Web Light Novel</h1>
+                      <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                        Web Light Novel
+                      </h1>
                     </div>
                     <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                      <Link href="/" className="text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600">
+                      <Link
+                        href="/"
+                        className="text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600"
+                      >
                         Home
                       </Link>
-                      <Link href="/novels" className="text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600">
+                      <Link
+                        href="/novels"
+                        className="text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600"
+                      >
                         Novels
                       </Link>
-                      <Link href="/genres" className="text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600">
+                      <Link
+                        href="/genres"
+                        className="text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600"
+                      >
                         Genres
                       </Link>
                     </div>
@@ -44,12 +55,12 @@ export default function RootLayout({
 
                   {/* Bagian Kanan: Tombol Login */}
                   <div className="hidden sm:flex items-center ml-auto">
-                    <Button className="inline-flex">
+                    <div className="flex items-center mx-3">
+                      <ThemeSwitcher />
+                    </div>
+                    <Button className="">
                       <Link href="#">Login</Link>
                     </Button>
-                  </div>
-                  <div className="flex items-center">
-                    <ThemeSwitcher />
                   </div>
                 </div>
               </div>
