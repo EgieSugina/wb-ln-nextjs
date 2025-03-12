@@ -21,16 +21,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+          <div className="min-h-screen dark:bg-gray-900">
             <nav className="bg-white dark:bg-gray-800 shadow-sm">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                  <div className="flex">
-                    <div className="flex-shrink-0 flex items-center">
-                      <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                        Web Light Novel
-                      </h1>
-                    </div>
+                <div className="flex justify-between items-center h-16">
+                  {/* Bagian Kiri: Logo & Link */}
+                  <div className="flex items-center">
+                    <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                      Web Light Novel
+                    </h1>
                     <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                       <Link
                         href="/"
@@ -53,19 +52,19 @@ export default function RootLayout({
                     </div>
                   </div>
 
-                  {/* Bagian Kanan: Tombol Login */}
-                  <div className="hidden sm:flex items-center ml-auto">
-                    <div className="flex items-center mx-3">
-                      <ThemeSwitcher />
-                    </div>
-                    <Button className="">
+                  {/* Bagian Kanan: Theme Switcher & Login */}
+                  <div className="hidden sm:flex items-center space-x-4">
+                    <ThemeSwitcher />
+                    <Button>
                       <Link href="#">Login</Link>
                     </Button>
                   </div>
                 </div>
               </div>
             </nav>
-            <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+
+            {/* Main Content yang Selalu di Tengah */}
+            <main className="w-full">
               {children}
             </main>
           </div>

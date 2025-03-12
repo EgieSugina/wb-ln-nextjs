@@ -189,7 +189,7 @@ export function EditNovelForm({ novel, trigger }: EditNovelFormProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="text-black dark:text-white">
             Edit
           </Button>
         )}
