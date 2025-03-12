@@ -13,6 +13,12 @@ export const GET_NOVELS = gql`
         id
         name
       }
+      chapters {
+        id
+        number
+        title
+        createdAt
+      }
     }
   }
 `;
@@ -30,6 +36,7 @@ export const GET_NOVEL = gql`
         id
         number
         title
+        createdAt
       }
       genres {
         id
