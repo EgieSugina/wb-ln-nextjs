@@ -101,7 +101,7 @@ export default function NovelPage() {
                     src={novel.coverImage}
                     alt={`${novel.title} cover`}
                     fill
-                    className="object-cover"
+                    className="object-cover border-white border"
                   />
                 </div>
               ) : (
@@ -137,9 +137,11 @@ export default function NovelPage() {
                 </span>
               </div>
 
-              <div className="bg-gray-950 p-6 rounded-2xl shadow-lg mt-14">
-                <h2 className="text-xl font-semibold mb-2">Sinopsis:</h2>
-                <p className="text-gray-300 text-justify">
+              <div className="mt-5 w-full rounded-xl bg-gray-100 p-5 text-black text-justify dark:bg-zinc-900">
+                <h2 className="dark:text-white text-xl font-semibold mb-2">
+                  Sinopsis:
+                </h2>
+                <p className="dark:text-white text-justify text-sm">
                   {isExpanded
                     ? novel.description
                     : novel.description.split(" ").slice(0, 20).join(" ") +

@@ -49,6 +49,12 @@ export default function RootLayout({
                       >
                         Genres
                       </Link>
+                      <Link
+                        href="#"
+                        className="text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600"
+                      >
+                        Bookmark
+                      </Link>
                     </div>
                   </div>
 
@@ -64,9 +70,7 @@ export default function RootLayout({
             </nav>
 
             {/* Main Content yang Selalu di Tengah */}
-            <main className="w-full">
-              {children}
-            </main>
+            <main className="w-full">{children}</main>
           </div>
         </Providers>
       </body>
