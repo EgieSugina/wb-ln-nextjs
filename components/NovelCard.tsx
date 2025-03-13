@@ -26,31 +26,44 @@ export default function NovelCard({ novel }: { novel: Novel }) {
           )} */}
         </div>
         <div className="">
-          <div className="relative aspect-[2/3] w-full overflow-hidden rounded-t-sm mb-4">
+          <div className="relative aspect-[2/3] w-full overflow-hidden rounded-t-sm ">
+            <p className=" mb-2 absolute top-0 right-0 z-10 bg-secondary m-2 px-2 py-1 rounded-xl text-sm">
+              {novel.status === "Ongoing" && (
+                <span className="text-green-500">{novel.status}</span>
+              )}
+              {novel.status === "Completed" && (
+                <span className="text-blue-500">{novel.status}</span>
+              )}
+              {novel.status === "Hiatus" && (
+                <span className="text-red-500">{novel.status}</span>
+              )}
+            </p>
             {novel.coverImage ? (
-              <Image
-                src={novel.coverImage}
-                alt={`${novel.title} cover`}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
-                className="object-cover"
-              />
+              <>
+                <Image
+                  src={novel.coverImage}
+                  alt={`${novel.title} cover`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                  className="object-cover"
+                />
+              </>
             ) : (
               <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
                 <p className="text-gray-500">No cover image</p>
               </div>
             )}
-          </div>
-          <div className="px-2 pb-2">
-            <CardHeader className="p-0">
+            <CardHeader className="p-0 bottom-0 bg-secondary w-full text-center z-10 absolute">
               <CardTitle className="text-sm ">{novel.title}</CardTitle>
             </CardHeader>
+          </div>
+          <div className="px-2 pb-2">
             <CardContent className="py-2 px-0">
               {/* <p className="text-gray-600 mb-2">Author: {novel.author}</p>
                   <p className="text-gray-600 mb-2">Status: {novel.status}</p> */}
 
               {novel.chapters.length > 0 && (
-                <div
+                <Button
                   className="text-gray-600 text-xs mb-2 w-full h-full bg-secondary rounded-md flex justify-between items-center"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -92,9 +105,9 @@ export default function NovelCard({ novel }: { novel: Novel }) {
                       });
                     })()}
                   </span>
-                </div>
+                </Button>
               )}
-              <div className="flex flex-wrap gap-2">
+              {/* <div className="flex flex-wrap gap-2">
                 {novel.genres.map((genre) => (
                   <span
                     key={genre.id}
@@ -103,7 +116,7 @@ export default function NovelCard({ novel }: { novel: Novel }) {
                     {genre.name}
                   </span>
                 ))}
-              </div>
+              </div> */}
             </CardContent>
           </div>
         </div>

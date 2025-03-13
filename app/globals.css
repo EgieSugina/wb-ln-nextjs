@@ -10,7 +10,7 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 358 100% 66%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -39,7 +39,8 @@
     --bg: #dfe5f2;
     --bw: #fff; /* white and secondary black e.g. utility class variant would be: bg-[#fff] dark:bg-[#212121] */
     --blank: #000; /* blank black and white */
-    --border: #000;
+    --border: #ff545a;
+
     --text: #000;
     --mtext: #000; /* text that is placed on background with main color e.g. text color of default button */
     --ring: #000;
@@ -63,7 +64,7 @@
     --card-foreground: 334 0% 90%;
     --popover: 334 10% 5%;
     --popover-foreground: 334 0% 90%;
-    --primary: 334 64% 45%;
+    --primary: 358 100% 66%
     --primary-foreground: 0 0% 100%;
     --secondary: 334 10% 10%;
     --secondary-foreground: 0 0% 100%;
@@ -82,7 +83,7 @@
     --bg: #272933;
     --bw: #212121;
     --blank: #fff;
-    --border: #000;
+    --border: #ff545a;
     --text: #e6e6e6;
     --mtext: #000;
     --ring: #fff;
@@ -150,5 +151,6 @@
 }
 
 * {
-  @apply border-border;
+  @apply border-border ;
 }
+
