@@ -139,7 +139,7 @@ export default function NovelPage() {
 
               <div className="mt-5 w-full rounded-xl bg-gray-100 p-5 text-black text-justify dark:bg-zinc-900">
                 <h2 className="dark:text-white text-xl font-semibold mb-2">
-                  Sinopsis:
+                  {novel.title} Sinopsis:
                 </h2>
                 <p className="dark:text-white text-justify text-sm">
                   {isExpanded

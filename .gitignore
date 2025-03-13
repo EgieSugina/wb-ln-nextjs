@@ -50,3 +50,5 @@ prisma/dev2.db-trace.jsonl
 prisma/dev2.db-trace.jsonl.gz
 prisma/dev2.db-trace.jsonl.gz.part
 prisma/dev2.db-trace.jsonl.gz.part.1
+
+.idea

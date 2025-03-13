@@ -23,7 +23,7 @@ export default function RootLayout({
         <Providers>
           <div className="min-h-screen dark:bg-gray-900">
             <nav className="bg-white dark:bg-gray-800 shadow-sm">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                   {/* Bagian Kiri: Logo & Link */}
                   <div className="flex items-center">
@@ -70,7 +70,7 @@ export default function RootLayout({
             </nav>
 
             {/* Main Content yang Selalu di Tengah */}
-            <main className="w-full">{children}</main>
+            <main className="w-full dark:bg-black">{children}</main>
           </div>
         </Providers>
       </body>
