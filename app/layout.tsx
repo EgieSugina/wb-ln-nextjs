@@ -4,7 +4,7 @@ import { Providers } from "./providers";
 import Link from "next/link";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import { Button } from "@/components/ui/button";
-
+import {LoginDialog} from "@/components/LoginDialog"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -61,9 +61,9 @@ export default function RootLayout({
                   {/* Bagian Kanan: Theme Switcher & Login */}
                   <div className="hidden sm:flex items-center space-x-4">
                     <ThemeSwitcher />
-                    <Button>
-                      <Link href="#">Login</Link>
-                    </Button>
+
+                      <LoginDialog />
+
                   </div>
                 </div>
               </div>
